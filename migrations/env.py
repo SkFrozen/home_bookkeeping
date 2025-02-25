@@ -1,6 +1,7 @@
 import asyncio
 from logging.config import fileConfig
 
+import alembic_postgresql_enum
 from alembic import context
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
@@ -21,7 +22,8 @@ if config.config_file_name is not None:
 # target_metadata = mymodel.Base.metadata
 from app.accounts import Account
 from app.operations import Expense, Income, Saving
-from app.orm import BaseModel, db_url
+from app.orm import BaseModel
+from app.settings import settings
 from app.users import Group, User, UserGroup
 
 target_metadata = BaseModel.metadata
@@ -30,7 +32,7 @@ target_metadata = BaseModel.metadata
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
-config.set_main_option("sqlalchemy.url", db_url)
+config.set_main_option("sqlalchemy.url", settings.get_db_url)
 
 
 def run_migrations_offline() -> None:

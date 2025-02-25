@@ -1,16 +1,13 @@
 from datetime import datetime
-from typing import TYPE_CHECKING
 
 from sqlalchemy import ForeignKey, String, UniqueConstraint, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.orm import BaseModel
-
-if TYPE_CHECKING:
-    from app.accounts import Account
+from app.accounts import Account
+from app.orm import BaseModel, Manager
 
 
-class User(BaseModel):
+class User(BaseModel, Manager):
     username: Mapped[str] = mapped_column(String(100), nullable=False, unique=True)
     password: Mapped[str] = mapped_column(String(128), nullable=False)
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
@@ -21,7 +18,7 @@ class User(BaseModel):
     accounts: Mapped[list["Account"]] = relationship(back_populates="user")
 
 
-class Group(BaseModel):
+class Group(BaseModel, Manager):
     name: Mapped[str] = mapped_column(String(100), nullable=False, unique=True)
     note: Mapped[str | None]
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())

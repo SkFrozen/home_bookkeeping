@@ -8,6 +8,8 @@ BASE_DIR = Path(__file__).parent.parent
 
 
 class Settings(BaseSettings):
+    mode: str
+    api_prefix: str = "/api/v1"
     host: str = "0.0.0.0"
     port: int = 8000
 
@@ -31,11 +33,16 @@ class Settings(BaseSettings):
 
     debug: int = 1
 
+    jwt_secret_key: str
+    access_token_expire_minutes: int = 60
+    refresh_token_expire_hours: int = 24 * 7
+
     model_config = SettingsConfigDict(
         case_sensitive=False, env_file=os.path.join(BASE_DIR, ".env")
     )
 
-    def get_db_url(self):
+    @property
+    def get_db_url(self) -> str:
         return (
             f"postgresql+asyncpg://{self.db_user}:{self.db_password}@"
             f"{self.db_host}:{self.db_port}/{self.db_name}"

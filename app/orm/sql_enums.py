@@ -8,32 +8,27 @@ class CurrencyEnum(enum.Enum):
     EUR = "EUR"
 
 
-class OwnerTypeEnum(enum.Enum):
-    user = "user"
-    group = "group"
-
-
 class IncomeCategoryEnum(enum.Enum):
-    inheritance = "inheritance"
-    insurance = "insurance"
-    lottery = "lottery"
-    pension = "pension"
-    present = "present"
-    rent = "rent"
-    salary = "salary"
-    sold_property = "sold property"
+    inheritance = "Inheritance"
+    insurance = "Insurance"
+    lottery = "Lottery"
+    pension = "Pension"
+    present = "Present"
+    rent = "Rent"
+    salary = "Salary"
+    sold_property = "Sold property"
 
 
 class ExpenseCategoryEnum(enum.Enum):
-    car = "car"
-    clothes = "clothes"
-    entertainment = "entertainment"
+    car = "Car"
+    clothes = "Clothes"
+    entertainment = "Entertainment"
     food = "food"
-    footwear = "footwear"
-    furniture = "furniture"
-    househoold_goods = "household goods"
-    medicine = "medicine"
-    regular_payments = "regular payments"
-    services = "services"
-    transport = "transport"
-    utilities = "utilities"
+    footwear = "Footwear"
+    furniture = "Furniture"
+    househoold_goods = "Household goods"
+    medicine = "Medicine"
+    regular_payments = "Regular payments"
+    services = "Services"
+    transport = "Transport"
+    utilities = "Utilities"

@@ -1,25 +1,52 @@
-"""modified models user group and created models account incomes expense saving
+"""create models account, income, expense, saving
 
-Revision ID: a117b181306b
+Revision ID: 3079d98fd2f2
 Revises: ab71a15e9619
-Create Date: 2025-02-13 17:24:00.380619
+Create Date: 2025-02-24 20:03:53.004142
 
 """
 
 from typing import Sequence, Union
 
-from alembic import op
 import sqlalchemy as sa
-
+from alembic import op
+from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision: str = "a117b181306b"
+revision: str = "3079d98fd2f2"
 down_revision: Union[str, None] = "ab71a15e9619"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
+    sa.Enum(
+        "car",
+        "clothes",
+        "entertainment",
+        "food",
+        "footwear",
+        "furniture",
+        "househoold_goods",
+        "medicine",
+        "regular_payments",
+        "services",
+        "transport",
+        "utilities",
+        name="expensecategoryenum",
+    ).create(op.get_bind())
+    sa.Enum(
+        "inheritance",
+        "insurance",
+        "lottery",
+        "pension",
+        "present",
+        "rent",
+        "salary",
+        "sold_property",
+        name="incomecategoryenum",
+    ).create(op.get_bind())
+    sa.Enum("USD", "RUB", "BYN", "EUR", name="currencyenum").create(op.get_bind())
     op.create_table(
         "accounts",
         sa.Column("id", sa.Integer(), autoincrement=True, nullable=False),
@@ -27,17 +54,33 @@ def upgrade() -> None:
         sa.Column("balance", sa.Integer(), nullable=False),
         sa.Column(
             "currency",
-            sa.Enum("USD", "RUB", "BYN", "EUR", name="currencyenum"),
+            postgresql.ENUM(
+                "USD", "RUB", "BYN", "EUR", name="currencyenum", create_type=False
+            ),
             nullable=False,
         ),
         sa.Column("note", sa.String(), nullable=True),
         sa.Column(
-            "owner_type", sa.Enum("user", "group", name="ownertypeenum"), nullable=False
-        ),
-        sa.Column(
             "created_at", sa.DateTime(), server_default=sa.text("now()"), nullable=False
         ),
-        sa.Column("owner_id", sa.Integer(), nullable=False),
+        sa.Column("user_id", sa.Integer(), nullable=True),
+        sa.Column("group_id", sa.Integer(), nullable=True),
+        sa.CheckConstraint(
+            "(user_id IS NOT NULL AND group_id IS NULL) OR (user_id IS NULL AND group_id IS NOT NULL)",
+            name=op.f("ck__accounts__account_owner"),
+        ),
+        sa.ForeignKeyConstraint(
+            ["group_id"],
+            ["groups.id"],
+            name=op.f("fk__accounts__group_id__groups"),
+            ondelete="CASCADE",
+        ),
+        sa.ForeignKeyConstraint(
+            ["user_id"],
+            ["users.id"],
+            name=op.f("fk__accounts__user_id__users"),
+            ondelete="CASCADE",
+        ),
         sa.PrimaryKeyConstraint("id", name=op.f("pk__accounts")),
     )
     op.create_table(
@@ -49,7 +92,7 @@ def upgrade() -> None:
         ),
         sa.Column(
             "category",
-            sa.Enum(
+            postgresql.ENUM(
                 "car",
                 "clothes",
                 "entertainment",
@@ -63,6 +106,7 @@ def upgrade() -> None:
                 "transport",
                 "utilities",
                 name="expensecategoryenum",
+                create_type=False,
             ),
             nullable=False,
         ),
@@ -85,7 +129,7 @@ def upgrade() -> None:
         ),
         sa.Column(
             "category",
-            sa.Enum(
+            postgresql.ENUM(
                 "inheritance",
                 "insurance",
                 "lottery",
@@ -95,6 +139,7 @@ def upgrade() -> None:
                 "salary",
                 "sold_property",
                 name="incomecategoryenum",
+                create_type=False,
             ),
             nullable=False,
         ),
@@ -118,7 +163,7 @@ def upgrade() -> None:
         ),
         sa.Column(
             "category",
-            sa.Enum(
+            postgresql.ENUM(
                 "car",
                 "clothes",
                 "entertainment",
@@ -132,6 +177,7 @@ def upgrade() -> None:
                 "transport",
                 "utilities",
                 name="expensecategoryenum",
+                create_type=False,
             ),
             nullable=False,
         ),
@@ -150,9 +196,35 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-
     op.drop_column("groups", "note")
     op.drop_table("savings")
     op.drop_table("incomes")
     op.drop_table("expenses")
     op.drop_table("accounts")
+    sa.Enum("USD", "RUB", "BYN", "EUR", name="currencyenum").drop(op.get_bind())
+    sa.Enum(
+        "inheritance",
+        "insurance",
+        "lottery",
+        "pension",
+        "present",
+        "rent",
+        "salary",
+        "sold_property",
+        name="incomecategoryenum",
+    ).drop(op.get_bind())
+    sa.Enum(
+        "car",
+        "clothes",
+        "entertainment",
+        "food",
+        "footwear",
+        "furniture",
+        "househoold_goods",
+        "medicine",
+        "regular_payments",
+        "services",
+        "transport",
+        "utilities",
+        name="expensecategoryenum",
+    ).drop(op.get_bind())
