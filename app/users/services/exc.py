@@ -20,5 +20,5 @@ InvalidAccessTokenException = HTTPException(
 )
 UserAlreadyExistException = HTTPException(
     status_code=HTTP_422_UNPROCESSABLE_ENTITY,
-    detail="User already exist",
+    detail="User already exists",
 )

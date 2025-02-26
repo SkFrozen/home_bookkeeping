@@ -11,7 +11,7 @@ from .services import create_jwt_token_pair, create_user, get_user_by_credential
 router = APIRouter(prefix="/users", tags=["users"])
 
 
-@router.post("/", response_model=UserRegistrationResponseSchema)
+@router.post("", response_model=UserRegistrationResponseSchema)
 async def registration_user_handler(
     user_data: UserCredentialsSchema,
     session: Annotated[AsyncSession, Depends(get_session)],
