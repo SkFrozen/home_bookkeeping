@@ -1,27 +1,29 @@
 from datetime import datetime
 
-from pydantic import BaseModel, Field
+from pydantic import Field
+
+from app.base_schema import CustomeBaseSchema
 
 
-class UserCredentialsSchema(BaseModel):
+class UserCredentialsSchema(CustomeBaseSchema):
     username: str = Field(..., max_length=100)
     password: str = Field(..., max_length=128)
 
 
-class UserRegistrationResponseSchema(BaseModel):
+class UserRegistrationResponseSchema(CustomeBaseSchema):
     id: int
     username: str = Field(..., max_length=100)
     created_at: datetime
 
 
-class TokenPair(BaseModel):
+class TokenPair(CustomeBaseSchema):
     access_token: str
     refresh_token: str
 
 
-class AccessToken(BaseModel):
+class AccessToken(CustomeBaseSchema):
     access_token: str
 
 
-class Refreshtoken(BaseModel):
+class RefreshToken(CustomeBaseSchema):
     refresh_token: str

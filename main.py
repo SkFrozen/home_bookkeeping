@@ -10,7 +10,7 @@ from app.settings import settings
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    db_helper.init(url=settings.get_db_url)
+    db_helper.init(url=settings.get_db_url, echo=True)
     # startup
     yield
     # shutdown

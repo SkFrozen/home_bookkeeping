@@ -3,7 +3,7 @@ from datetime import datetime
 from sqlalchemy import ForeignKey, String, UniqueConstraint, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.accounts import Account
+from app.accounts.models import Account
 from app.orm import BaseModel, Manager
 
 

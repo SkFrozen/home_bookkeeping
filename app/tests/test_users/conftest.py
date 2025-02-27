@@ -1,11 +1,10 @@
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.users import User
+from app.users import UserCredentialsSchema
+from app.users.services import create_user
 
 
 @pytest.fixture
 async def registered_user(session: AsyncSession):
-    user = User(username="test", password="test")
-    session.add(user)
-    await session.commit()
+    await create_user(session, UserCredentialsSchema(username="test", password="test"))

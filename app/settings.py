@@ -33,7 +33,7 @@ class Settings(BaseSettings):
 
     debug: int = 1
 
-    jwt_secret_key: str
+    jwt_secret_key: str = "B0IlAowlGMfz3QoOHIlMOkmWnFWjDfjI7brDKwqhF8U"
     access_token_expire_minutes: int = 60
     refresh_token_expire_hours: int = 24 * 7
 

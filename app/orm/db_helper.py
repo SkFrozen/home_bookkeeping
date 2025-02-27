@@ -73,4 +73,5 @@ db_helper = DatabaseHelper()
 
 async def get_session() -> AsyncIterator[AsyncSession]:
     async with db_helper.session() as session:
+        print(type(session))
         yield session
