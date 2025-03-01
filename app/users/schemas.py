@@ -27,3 +27,8 @@ class AccessToken(CustomeBaseSchema):
 
 class RefreshToken(CustomeBaseSchema):
     refresh_token: str
+
+
+class GroupSchema(CustomeBaseSchema):
+    name: str
+    note: str | None = Field(default=None)
